@@ -8,7 +8,9 @@ use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use App\Models\User;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -25,16 +27,31 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
-        $user = \App\Models\User::where('email', $request->email)->first();
+        // ambil input login (username atau email)
+        $loginInput = $request->input('login');
+
+        // deteksi apakah input berupa email atau username
+        $fieldType = filter_var($loginInput, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        // cari user berdasarkan email atau username
+        $user = User::where('email', $loginInput)
+            ->orWhere('name', $loginInput)
+            ->first();
+
         if (!$user) {
-            return back()->with('error', 'Email Not Found.')->withInput();
+            return back()->with('error', ucfirst($fieldType) . ' not found.')->withInput();
         }
-        if (!\Illuminate\Support\Facades\Hash::check($request->password, $user->password)) {
+
+        // cek password
+        if (!Hash::check($request->password, $user->password)) {
             return back()->with('error', 'Wrong Password.')->withInput();
         }
+
+        // login user
         Auth::login($user);
         $request->session()->regenerate();
 
+        // redirect sesuai role
         $role = Auth::user()->role;
 
         return match ($role) {
@@ -42,9 +59,7 @@ class AuthenticatedSessionController extends Controller
             'maintenance' => redirect('/maintenance-dashboard'),
             default => redirect('/user-dashboard'),
         };
-
     }
-
 
     /**
      * Destroy an authenticated session.
@@ -54,7 +69,6 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');

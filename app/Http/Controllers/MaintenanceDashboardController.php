@@ -10,38 +10,53 @@ class MaintenanceDashboardController extends Controller
 {
     public function index()
     {
-        $response = Http::get('https://api-dummy.hpc-hs.my.id/docker/container?machine=machine 1&user=all');
-        $containers = $response->successful() ? ($response->json()['data'] ?? []) : [];
+        // Ambil semua user dengan role 'pengguna'
+        $users = \App\Models\User::where('role', 'pengguna')->get();
 
-        return view('maintenance.maintenance', compact('containers'));
+        $allContainers = [];
+
+        foreach ($users as $user) {
+            $containersResponse = Http::get('https://api-dummy.hpc-hs.my.id/docker/container', [
+                'machine' => 'machine 1', // bisa juga nanti diganti dynamic kalau ada banyak machine
+                'user' => $user->id,
+            ]);
+
+            if ($containersResponse->successful()) {
+                $allContainers[$user->id] = $containersResponse->json()['data'] ?? [];
+            } else {
+                $allContainers[$user->id] = [];
+            }
+        }
+
+        return view('maintenance.maintenance', compact('allContainers', 'users'));
     }
 
-    public function restart(Request $request)
+    public function reset(Request $request)
     {
         $id = $request->input('id_container');
 
-        Log::info("MAINTENANCE: User request RESTART container", [
+        Log::info("MAINTENANCE: User request RESET container", [
             'id_container' => $id
         ]);
 
         $response = Http::asForm()->post('https://api-dummy.hpc-hs.my.id/docker/container', [
-            'Action' => 'restart',
+            'Action' => 'reset',
             'id_containter' => $id // typo diperbaiki dari 'id_containter'
         ]);
 
-        Log::info("MAINTENANCE: API response RESTART", [
+        Log::info("MAINTENANCE: API response RESET", [
             'status' => $response->status(),
             'body' => $response->body()
         ]);
 
         if ($response->successful()) {
-            return redirect()->route('maintenance.dashboard')->with('status', "Container {$id} berhasil direstart.");
+            return redirect()->route('maintenance.dashboard')->with('status', "Container {$id} berhasil direset.");
         } else {
-            return redirect()->route('maintenance.dashboard')->with('status', "Gagal restart container {$id}. Silakan cek log.");
+            return redirect()->route('maintenance.dashboard')->with('status', "Gagal reset container {$id}. Silakan cek log.");
         }
     }
 
-    public function restartAll(Request $request)
+    public function resetAll(Request $request)
     {
         $request->validate([
             'ids' => 'required|string', // akan dikirim dalam bentuk JSON string
@@ -50,10 +65,10 @@ class MaintenanceDashboardController extends Controller
         $ids = json_decode($request->input('ids'), true);
 
         if (!is_array($ids) || empty($ids)) {
-            return back()->with('status', 'Tidak ada container yang dipilih untuk restart.');
+            return back()->with('status', 'Tidak ada container yang dipilih untuk reset.');
         }
 
-        Log::info("MAINTENANCE: Request restart all containers", [
+        Log::info("MAINTENANCE: Request reset all containers", [
             'maintenance_id' => auth()->id(),
             'containers' => $ids
         ]);
@@ -62,18 +77,18 @@ class MaintenanceDashboardController extends Controller
 
         foreach ($ids as $id) {
             $response = Http::asForm()->post('https://api-dummy.hpc-hs.my.id/docker/container', [
-                'Action' => 'restart',
+                'Action' => 'reset',
                 'id_containter' => $id
             ]);
 
-            Log::info("MAINTENANCE: Response restart container {$id}", [
+            Log::info("MAINTENANCE: Response reset container {$id}", [
                 'status' => $response->status(),
                 'body' => $response->body()
             ]);
 
             if (!$response->successful()) {
                 $allSuccess = false;
-                Log::error("MAINTENANCE: Gagal restart container {$id}", [
+                Log::error("MAINTENANCE: Gagal reset container {$id}", [
                     'response_status' => $response->status(),
                     'response_body' => $response->body()
                 ]);
@@ -83,8 +98,8 @@ class MaintenanceDashboardController extends Controller
         return redirect()->route('maintenance.dashboard')->with(
             'status',
             $allSuccess
-            ? 'Semua container berhasil direstart.'
-            : 'Sebagian container gagal direstart. Silakan cek log.'
+            ? 'Service berhasil direset.'
+            : 'Sebagian container gagal direset. Silakan cek log.'
         );
     }
 
@@ -101,6 +116,9 @@ class MaintenanceDashboardController extends Controller
             $log = 'Tidak dapat mengambil log.';
         }
 
-        return view('maintenance.log', compact('id', 'log'));
+        // ambil nama container dari query string
+        $name = request()->query('name', 'Unknown');
+
+        return view('maintenance.log', compact('id', 'name', 'log'));
     }
 }

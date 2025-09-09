@@ -165,8 +165,12 @@ class UserDashboardController extends Controller
             'body' => $response->body(),
         ]);
 
-        return redirect()->route('user.dashboard')->with('success', $response->successful()
-            ? 'Package berhasil diinstall.'
-            : 'Gagal menginstall package. Cek kembali ID dan key.');
+        if ($response->successful()) {
+            // ✅ Berhasil → ke dashboard
+            return redirect()->route('user.dashboard')->with('success', 'Package berhasil diinstall.');
+        } else {
+            // ❌ Gagal → tetap di halaman install
+            return back()->with('error', 'Gagal menginstall package. Cek kembali ID dan key.');
+        }
     }
 }

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Welcome | INDONESIA AI IN THE BOX</title>
+    <title>Welcome | INDONESIA AI IN BOX</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -14,7 +14,7 @@
     <!-- Hero -->
     <section class="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex flex-col justify-center items-center px-6 text-center">
         <img src="/icons/Logo.png" alt="Logo" class="w-20 h-20 mb-4 animate-bounce">
-        <h1 class="text-4xl md:text-5xl font-extrabold text-blue-400 mb-4">INDONESIA AI IN THE BOX</h1>
+        <h1 class="text-4xl md:text-5xl font-extrabold text-blue-400 mb-4">INDONESIA AI IN BOX</h1>
         <p class="text-gray-300 text-lg mb-6 max-w-xl">Platform manajemen container cerdas untuk riset, edukasi, dan implementasi AI yang efisien dan aman.</p>
         <div class="flex gap-4 mb-12">
             <a href="{{ route('login') }}" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded text-white font-medium shadow-lg transition">Login</a>
@@ -119,7 +119,7 @@
     <!-- Footer -->
     <footer class="bg-gray-900 text-center text-sm text-gray-400 py-6 border-t border-gray-700">
         <p>&copy; {{ date('Y') }} Container Management Dashboard. All rights reserved.</p>
-        <p class="mt-1">Dibuat oleh tim <span class="text-blue-400 font-semibold">INDONESIA AI IN THE BOX</span>.</p>
+        <p class="mt-1">Dibuat oleh tim <span class="text-blue-400 font-semibold">INDONESIA AI IN BOX</span>.</p>
     </footer>
 
 </body>

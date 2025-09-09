@@ -4,7 +4,7 @@
         <!-- Main Content -->
         <div class="flex-grow flex items-center justify-center">
             <div class="bg-gray-800 border border-blue-600 rounded-lg px-8 py-10 w-full max-w-md text-center shadow-lg">
-                
+
                 <!-- Logo Besar Tengah -->
                 <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center">
                     <img src="{{ asset('images/Logo.png') }}" alt="Logo" class="w-16 h-16"> <!-- Logo besar tengah -->
@@ -20,13 +20,19 @@
                         {{ session('success') }}
                     </div>
                 @endif
+                @if (session('error'))
+                    <div id="error-alert" class="mb-4 px-4 py-2 bg-red-600 text-white rounded shadow">
+                        {{ session('error') }}
+                    </div>
+                @endif
 
                 <!-- Form -->
                 <form method="POST" action="{{ route('user.package.install') }}">
                     @csrf
 
                     <div class="text-left text-sm text-gray-300 mb-2">Pilih Package</div>
-                    <select name="id" required class="w-full p-2 mb-4 rounded border border-gray-600 bg-gray-700 text-white">
+                    <select name="id" required
+                        class="w-full p-2 mb-4 rounded border border-gray-600 bg-gray-700 text-white">
                         <option value="">-- Pilih Package --</option>
                         @foreach ($packages as $pkg)
                             <option value="{{ $pkg['id'] }}">{{ $pkg['name'] ?? 'Unnamed' }}</option>
@@ -54,12 +60,12 @@
     <!-- Auto-hide alert -->
     <script>
         setTimeout(() => {
-            const alert = document.getElementById('success-alert');
-            if (alert) {
+            const alerts = document.querySelectorAll('#success-alert, #error-alert');
+            alerts.forEach(alert => {
                 alert.style.transition = 'opacity 0.5s ease-out';
                 alert.style.opacity = '0';
                 setTimeout(() => alert.remove(), 500);
-            }
+            });
         }, 3000);
     </script>
 </x-app-layout>

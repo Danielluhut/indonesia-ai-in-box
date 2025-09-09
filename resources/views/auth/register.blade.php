@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Register | INDONESIA AI IN THE BOX</title>
+    <title>Register | INDONESIA AI IN BOX</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
@@ -14,7 +14,7 @@
         <div class="flex flex-col items-center mb-6">
             <img src="{{ asset('icons/Logo.png') }}" alt="Logo" class="w-16 h-16 mx-auto mb-4 animate-bounce">
             <h1 class="text-xl font-semibold text-white">INDONESIA AI</h1>
-            <p class="text-sm text-gray-400 tracking-widest">IN THE BOX</p>
+            <p class="text-sm text-gray-400 tracking-widest">IN BOX</p>
         </div>
 
         <h2 class="text-lg font-semibold text-center mb-6">Create Account</h2>

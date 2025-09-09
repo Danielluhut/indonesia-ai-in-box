@@ -61,9 +61,9 @@ Route::middleware(['auth', 'role:pengguna'])->group(function () {
 // Maintenance routes
 Route::middleware(['auth', 'role:maintenance'])->group(function () {
     Route::get('maintenance-dashboard', [MaintenanceDashboardController::class, 'index'])->name('maintenance.dashboard');
-    Route::post('maintenance-dashboard/restart', [MaintenanceDashboardController::class, 'restart'])->name('maintenance.container.restart');
+    Route::post('maintenance-dashboard/restart', [MaintenanceDashboardController::class, 'reset'])->name('maintenance.container.reset');
     Route::get('maintenance-dashboard/log/{id}', [MaintenanceDashboardController::class, 'log'])->name('maintenance.container.log');
-    Route::post('maintenance-dashboard/restart-all', [MaintenanceDashboardController::class, 'restartAll'])->name('maintenance.container.restartAll');
+    Route::post('maintenance-dashboard/restart-all', [MaintenanceDashboardController::class, 'resetAll'])->name('maintenance.container.resetAll');
 });
 
 Route::middleware('redirect.role')->group(function () {

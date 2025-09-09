@@ -1,0 +1,265 @@
+{
+	"info": {
+		"_postman_id": "db9c1449-199d-4b00-a39a-d8008c7203c3",
+		"name": "Indonesia-ai.id-Controller",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8472901",
+		"_collection_link": "https://bold-shuttle-704377.postman.co/workspace/Kemenkes~ca211cac-7c4a-4f73-8b14-7b1301f333ed/collection/8472901-db9c1449-199d-4b00-a39a-d8008c7203c3?action=share&source=collection_link&creator=8472901"
+	},
+	"item": [
+		{
+			"name": "LIST All Machine",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api-dummy.hpc-hs.my.id/docker/machine",
+					"protocol": "https",
+					"host": [
+						"api-dummy",
+						"hpc-hs",
+						"my",
+						"id"
+					],
+					"path": [
+						"docker",
+						"machine"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ADD Machine",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Machine 1",
+							"type": "text"
+						},
+						{
+							"key": "location",
+							"value": "Gunadarma Kampus K",
+							"type": "text"
+						},
+						{
+							"key": "ip",
+							"value": "123.45.56.23",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api-dummy.hpc-hs.my.id/docker/machine",
+					"protocol": "https",
+					"host": [
+						"api-dummy",
+						"hpc-hs",
+						"my",
+						"id"
+					],
+					"path": [
+						"docker",
+						"machine"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Machine",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "Machine 1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api-dummy.hpc-hs.my.id/docker/machine",
+					"protocol": "https",
+					"host": [
+						"api-dummy",
+						"hpc-hs",
+						"my",
+						"id"
+					],
+					"path": [
+						"docker",
+						"machine"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Docker",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api-dummy.hpc-hs.my.id/docker/container?machine=machine 1&user=user_id",
+					"protocol": "https",
+					"host": [
+						"api-dummy",
+						"hpc-hs",
+						"my",
+						"id"
+					],
+					"path": [
+						"docker",
+						"container"
+					],
+					"query": [
+						{
+							"key": "machine",
+							"value": "machine 1"
+						},
+						{
+							"key": "user",
+							"value": "user_id"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Docker Action",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "Action",
+							"value": "restart",
+							"description": "shutdown or restart or stop",
+							"type": "text"
+						},
+						{
+							"key": "id_containter",
+							"value": "12345678",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api-dummy.hpc-hs.my.id/docker/container",
+					"protocol": "https",
+					"host": [
+						"api-dummy",
+						"hpc-hs",
+						"my",
+						"id"
+					],
+					"path": [
+						"docker",
+						"container"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Docker Show Logs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api-dummy.hpc-hs.my.id/docker/container/logs?id_container=12345678",
+					"protocol": "https",
+					"host": [
+						"api-dummy",
+						"hpc-hs",
+						"my",
+						"id"
+					],
+					"path": [
+						"docker",
+						"container",
+						"logs"
+					],
+					"query": [
+						{
+							"key": "id_container",
+							"value": "12345678"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Package",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api-dummy.hpc-hs.my.id/docker/package",
+					"protocol": "https",
+					"host": [
+						"api-dummy",
+						"hpc-hs",
+						"my",
+						"id"
+					],
+					"path": [
+						"docker",
+						"package"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Install Package",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "key",
+							"value": "1234567890",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://api-dummy.hpc-hs.my.id/docker/package",
+					"protocol": "https",
+					"host": [
+						"api-dummy",
+						"hpc-hs",
+						"my",
+						"id"
+					],
+					"path": [
+						"docker",
+						"package"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

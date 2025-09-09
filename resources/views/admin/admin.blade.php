@@ -20,7 +20,6 @@
         @endif
 
         <!-- Services -->
-        <!-- Services -->
         <div class="bg-gray-800 p-4 rounded shadow mb-10">
             <h2 class="text-lg font-semibold mb-4">Daftar Services (Containers)</h2>
 
@@ -37,7 +36,12 @@
                     @if (is_array($services) && count($services) > 0)
                         @foreach ($services as $service)
                             @if (!empty($service['container_data']) && is_array($service['container_data']))
-                                <div x-data="{ open: false }" class="bg-gray-900 mb-4 rounded shadow">
+                                @php
+                                    $uniqueServiceKey = 'service-' . $user->id . '-' . ($service['service'] ?? 'unknown') . '-' . ($service['machine'] ?? 'no-machine');
+                                @endphp
+                                <div x-data="{ open: JSON.parse(localStorage.getItem('{{ $uniqueServiceKey }}')) ?? false }"
+                                    x-init="$watch('open', value => localStorage.setItem('{{ $uniqueServiceKey }}', JSON.stringify(value)))"
+                                    class="bg-gray-900 mb-4 rounded shadow">
                                     <div
                                         class="w-full flex flex-wrap md:flex-nowrap justify-between items-center px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-t">
                                         <div @click="open = !open" class="flex items-center gap-2 font-semibold cursor-pointer">
@@ -51,16 +55,17 @@
                                         </div>
 
                                         <div class="flex flex-wrap gap-2 mt-2 md:mt-0">
-                                            @foreach (['stop', 'restart', 'shutdown'] as $action)
+                                            @foreach (['start', 'stop', 'restart', 'shutdown'] as $action)
                                                     <form method="POST" action="{{ route('admin.service.action') }}">
                                                         @csrf
                                                         <input type="hidden" name="Action" value="{{ $action }}">
                                                         <input type="hidden" name="ids"
                                                             value='@json(collect($service["container_data"])->pluck("id_container")->all())'>
                                                         <button class="px-3 py-1 rounded text-xs whitespace-nowrap
-                                                                        {{ $action === 'stop' ? 'bg-red-600 hover:bg-red-700' :
-                                                ($action === 'restart' ? 'bg-yellow-600 hover:bg-yellow-700' :
-                                                    'bg-gray-600 hover:bg-gray-700') }}">
+                                                                                                                                                                                                                                                {{ $action === 'start' ? 'bg-green-600 hover:bg-green-700' :
+                                                ($action === 'stop' ? 'bg-red-600 hover:bg-red-700' :
+                                                    ($action === 'restart' ? 'bg-yellow-600 hover:bg-yellow-700' :
+                                                        'bg-gray-600 hover:bg-gray-700')) }}">
                                                             {{ ucfirst($action) }} All
                                                         </button>
                                                     </form>
@@ -100,7 +105,7 @@
                                                                                         <input type="hidden" name="Action" value="{{ $action }}">
                                                                                         <input type="hidden" name="id_container" value="{{ $containerId }}">
                                                                                         <button class="px-3 py-1 rounded text-xs whitespace-nowrap
-                                                                                                            {{ $action === 'stop' ? 'bg-red-600 hover:bg-red-700' :
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{ $action === 'stop' ? 'bg-red-600 hover:bg-red-700' :
                                                                     ($action === 'restart' ? 'bg-yellow-600 hover:bg-yellow-700' :
                                                                         'bg-gray-600 hover:bg-gray-700') }}">
                                                                                             {{ ucfirst($action) }}

@@ -8,18 +8,18 @@
         <div class="flex items-center gap-4 mb-6">
             <div class="text-sm bg-gray-700 px-3 py-1 rounded-full flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full 
-                    {{ ($status ?? '') === 'Running' ? 'bg-green-500' : 
-                       (($status ?? '') === 'Stopped' ? 'bg-red-500' : 'bg-gray-500') }}">
+            {{ ($container['State'] ?? '') === 'running' ? 'bg-green-500' :
+    (($container['State'] ?? '') === 'exited' ? 'bg-red-500' : 'bg-gray-500') }}">
                 </span>
-                Status: 
-                <span class="{{ ($status ?? '') === 'Running' ? 'text-green-400' : 'text-red-400' }}">
-                    {{ $status ?? 'Unknown' }}
+                Status:
+                <span class="{{ ($container['State'] ?? '') === 'running' ? 'text-green-400' : 'text-red-400' }}">
+                    {{ ucfirst($container['State'] ?? 'Unknown') }}
                 </span>
             </div>
 
-            @if (!empty($uptime))
+            @if (!empty($container['Uptime']))
                 <div class="text-sm bg-gray-700 px-3 py-1 rounded-full">
-                    Uptime: <span class="text-yellow-400">{{ $uptime }}</span>
+                    Uptime: <span class="text-yellow-400">{{ $container['Uptime'] }}</span>
                 </div>
             @endif
         </div>
