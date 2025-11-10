@@ -92,23 +92,6 @@ class AdminDashboardController extends Controller
         );
     }
 
-    public function installPackage(Request $request)
-    {
-        $request->validate([
-            'id' => 'required|string',
-            'key' => 'required|string',
-        ]);
-
-        $response = Http::asForm()->post('https://api-dummy.hpc-hs.my.id/docker/package', [
-            'id' => $request->id,
-            'key' => $request->key,
-        ]);
-
-        return back()->with(
-            $response->successful() ? 'success' : 'error',
-            $response->successful() ? 'Package berhasil diinstall.' : 'Gagal menginstall package.'
-        );
-    }
 
     public function containerAction(Request $request)
     {
