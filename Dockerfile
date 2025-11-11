@@ -24,6 +24,11 @@ RUN php artisan config:clear && php artisan cache:clear
 # Ganti permission storage & bootstrap
 RUN chmod -R 775 storage bootstrap/cache
 
+# Pastikan semua folder Laravel ada dan bisa ditulis
+RUN mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache \
+    && chmod -R 775 storage bootstrap/cache
+
+
 # Expose port default (Railway otomatis pakai ini)
 EXPOSE $PORT
 ENV PORT=8000
