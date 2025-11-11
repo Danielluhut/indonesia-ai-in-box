@@ -28,8 +28,8 @@ RUN php artisan key:generate || true
 RUN php artisan config:cache || true
 RUN php artisan route:cache || true
 
-# Expose port 8080 (yang digunakan Railway/Render)
-EXPOSE 8080
+# Gunakan port 8000 secara default, atau port dari Railway
+ENV PORT=8000
 
-# Jalankan Laravel pakai PHP built-in server
-CMD php artisan serve --host=0.0.0.0 --port=8080
+# Jalankan PHP built-in server langsung
+CMD php -S 0.0.0.0:${PORT} -t public
