@@ -1,35 +1,32 @@
- 
-# Gunakan image PHP dengan Apache
+# Gunakan PHP 8.2 dengan Apache
 FROM php:8.2-apache
 
-# Install ekstensi yang dibutuhkan Laravel
+# Install dependencies sistem
 RUN apt-get update && apt-get install -y \
-    git unzip zip libpq-dev libpng-dev libjpeg-dev libfreetype6-dev && \
-    docker-php-ext-configure gd --with-freetype --with-jpeg && \
-    docker-php-ext-install pdo pdo_mysql gd
-
-# Aktifkan mod_rewrite untuk Laravel (routing)
-RUN a2enmod rewrite
-
-# Set working directory
-WORKDIR /var/www/html
-
-# Copy semua file project ke container
-COPY . .
+    git zip unzip libpq-dev && \
+    docker-php-ext-install pdo pdo_pgsql
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
+# Atur working directory
+WORKDIR /var/www/html
+
+# Copy semua file Laravel ke container
+COPY . .
+
 # Install dependencies Laravel
 RUN composer install --no-dev --optimize-autoloader
 
-# Laravel build cache
-RUN php artisan key:generate || true
-RUN php artisan config:cache || true
-RUN php artisan route:cache || true
+# Generate cache config
+RUN php artisan config:clear && php artisan cache:clear
 
-# Gunakan port 8000 secara default, atau port dari Railway
+# Ganti permission storage & bootstrap
+RUN chmod -R 775 storage bootstrap/cache
+
+# Expose port default (Railway otomatis pakai ini)
+EXPOSE 8000
 ENV PORT=8000
 
-# Jalankan PHP built-in server langsung
+# Jalankan PHP built-in server, bukan artisan serve!
 CMD php -S 0.0.0.0:${PORT} -t public
