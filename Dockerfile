@@ -25,8 +25,8 @@ RUN php artisan config:clear && php artisan cache:clear
 RUN chmod -R 775 storage bootstrap/cache
 
 # Expose port default (Railway otomatis pakai ini)
-EXPOSE 8000
+EXPOSE $PORT
 ENV PORT=8000
 
 # Jalankan PHP built-in server, bukan artisan serve!
-CMD php -S 0.0.0.0:${PORT} -t public
+CMD sh -c "php -S 0.0.0.0:$PORT -t public"
